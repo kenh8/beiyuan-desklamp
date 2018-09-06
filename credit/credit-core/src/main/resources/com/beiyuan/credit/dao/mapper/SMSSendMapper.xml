@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.beiyuan.credit.dao.SmsSendMapper" >
+  <resultMap id="BaseResultMap" type="com.beiyuan.credit.entity.SmsSend" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="order_sn" property="orderSn" jdbcType="VARCHAR" />
+    <result column="send_time" property="sendTime" jdbcType="TIMESTAMP" />
+    <result column="send_phone" property="sendPhone" jdbcType="VARCHAR" />
+    <result column="send_message" property="sendMessage" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" /><!--status-->
+  </resultMap>
+  <sql id="Base_Column_List" >
+    t.id,t.order_sn ,t.send_time ,t.send_phone,t.send_message,t.status
+  </sql>
+  <sql id="condition" >
+    <if test="null!=params" >
+      <if test="params.id != null" >
+        and t.id = #{params.id,jdbcType=BIGINT}
+      </if>
+      <if test="params.orderSn != null and '' != params.orderSn" >
+        and t.order_sn = #{params.orderSn,jdbcType=VARCHAR}
+      </if>
+      <if test="params.sendTime != null" >
+        and t.send_time = #{params.sendTime,jdbcType=TIMESTAMP}
+      </if>
+      <if test="params.sendPhone != null and '' != params.sendPhone" >
+        and t.send_phone = #{params.sendPhone,jdbcType=VARCHAR}
+      </if>
+      <if test="params.sendMessage != null and '' != params.sendMessage" >
+        and t.send_message = #{params.sendMessage,jdbcType=VARCHAR}
+      </if>
+      <if test="params.status != null " >
+        and t.status = #{params.status,jdbcType=TINYINT}
+      </if>
+    </if>
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sms_send t 
+    where t.id = #{id,jdbcType=BIGINT}
+  </select>
+  <select id="selectByParams" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sms_send t 
+    where 1=1
+    <include refid="condition" />
+  </select>
+  <select id="selectCount" resultType="java.lang.Integer" >
+    select count(1) as s from t_sms_send t  where 1=1
+    <include refid="condition" />
+  </select>
+  <select id="selectByPage" resultMap="BaseResultMap" parameterType="map" >
+    select 
+    <include refid="Base_Column_List" />
+    from t_sms_send t 
+    where 1=1
+    <include refid="condition" />
+    <if test="orderByField != null and ''!=orderByField" >
+      order by t.${orderByField} 
+      <if test="orderByField" >
+        ${orderBy}
+      </if>
+    </if>
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from t_sms_send
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <delete id="deleteByPrimarayKeyForModel" parameterType="com.beiyuan.credit.entity.SmsSend" >
+    delete from t_sms_send
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.beiyuan.credit.entity.SmsSend" >
+    insert into t_sms_send (id, order_sn, send_time, 
+      send_phone, send_message,status)
+    values (#{id,jdbcType=BIGINT}, #{orderSn,jdbcType=VARCHAR}, #{sendTime,jdbcType=TIMESTAMP}, 
+      #{sendPhone,jdbcType=VARCHAR}, #{sendMessage,jdbcType=VARCHAR},#{status,jdbcType=TINYINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.beiyuan.credit.entity.SmsSend" >
+    insert into t_sms_send
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="orderSn != null" >
+        order_sn,
+      </if>
+      <if test="sendTime != null" >
+        send_time,
+      </if>
+      <if test="sendPhone != null" >
+        send_phone,
+      </if>
+      <if test="sendMessage != null" >
+        send_message,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="orderSn != null" >
+        #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null" >
+        #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendPhone != null" >
+        #{sendPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="sendMessage != null" >
+        #{sendMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.beiyuan.credit.entity.SmsSend" >
+    update t_sms_send
+    <set >
+      <if test="orderSn != null" >
+        order_sn = #{orderSn,jdbcType=VARCHAR},
+      </if>
+      <if test="sendTime != null" >
+        send_time = #{sendTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="sendPhone != null" >
+        send_phone = #{sendPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="sendMessage != null" >
+        send_message = #{sendMessage,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.beiyuan.credit.entity.SmsSend" >
+    update t_sms_send
+    set order_sn = #{orderSn,jdbcType=VARCHAR},
+      send_time = #{sendTime,jdbcType=TIMESTAMP},
+      send_phone = #{sendPhone,jdbcType=VARCHAR},
+      send_message = #{sendMessage,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
